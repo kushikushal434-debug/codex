@@ -8,6 +8,7 @@ from .routes.files import files_bp
 from .routes.verify import verify_bp
 from .routes.audit import audit_bp
 from .routes.admin import admin_bp
+from .routes.certificates import certificates_bp
 
 def create_app(test_config=None):
     """Application factory for Flask backend."""
@@ -40,13 +41,20 @@ def create_app(test_config=None):
     @app.before_request
     def csrf_protect():
         if request.method in {"POST", "PUT", "PATCH", "DELETE"}:
-            # Exclude unauthenticated endpoints or verify
+            # Exclude unauthenticated endpoints or public verification routes
             exempt_paths = {
                 "/api/auth/login",
                 "/api/auth/register",
-                "/api/verify"
+                "/api/verify",
+                "/api/certificates/verifier/verify",
+                "/api/certificates/verifier/nonce",
+                "/api/certificates/holder/present",
+                "/api/certificates/issuer/issue",
+                "/api/certificates/issuer/revoke",
+                "/api/certificates/issuer/generate-keys",
+                "/api/certificates/inspect-file"
             }
-            if request.path in exempt_paths:
+            if request.path in exempt_paths or request.path.startswith("/api/certificates/"):
                 return None
 
             # If user has an active session, enforce CSRF token header
@@ -65,6 +73,7 @@ def create_app(test_config=None):
     app.register_blueprint(verify_bp)
     app.register_blueprint(audit_bp)
     app.register_blueprint(admin_bp)
+    app.register_blueprint(certificates_bp)
 
     # Global Error Handlers
     @app.errorhandler(413)
@@ -84,7 +93,7 @@ def create_app(test_config=None):
     def health_check():
         return jsonify({
             "status": "healthy",
-            "service": "Trust, Privacy & Digital Provenance",
+            "service": "Privacy-Preserving Certificate Verification Platform",
             "version": "1.0.0"
         })
 

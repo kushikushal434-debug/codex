@@ -73,11 +73,56 @@ CREATE TABLE IF NOT EXISTS audit_checkpoints (
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS issued_certificates (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    certificate_id TEXT UNIQUE NOT NULL,
+    issuer_id TEXT NOT NULL,
+    document_filename TEXT,
+    document_hash TEXT NOT NULL,
+    root_commitment TEXT NOT NULL,
+    ed25519_signature TEXT NOT NULL,
+    issuer_public_key TEXT NOT NULL,
+    claims_json TEXT NOT NULL,
+    issue_date TEXT NOT NULL,
+    expiry_date TEXT,
+    is_revoked INTEGER DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS certificate_revocations (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    certificate_id TEXT UNIQUE NOT NULL,
+    revocation_reason TEXT NOT NULL,
+    revoked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    issuer_signature TEXT
+);
+
+CREATE TABLE IF NOT EXISTS verification_nonces (
+    nonce TEXT PRIMARY KEY,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    expires_at TIMESTAMP NOT NULL,
+    is_used INTEGER DEFAULT 0,
+    verifier_label TEXT
+);
+
+CREATE TABLE IF NOT EXISTS certificate_verification_logs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    presentation_id TEXT NOT NULL,
+    certificate_id TEXT NOT NULL,
+    verification_result TEXT NOT NULL,
+    disclosed_fields TEXT,
+    hidden_fields_count INTEGER,
+    details TEXT,
+    verified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE INDEX IF NOT EXISTS idx_files_hash ON files(file_hash);
 CREATE INDEX IF NOT EXISTS idx_files_owner ON files(owner_id);
 CREATE INDEX IF NOT EXISTS idx_files_reg_id ON files(registration_id);
 CREATE INDEX IF NOT EXISTS idx_audit_block ON audit_logs(block_index);
 CREATE INDEX IF NOT EXISTS idx_verif_reg ON verifications(registration_id);
+CREATE INDEX IF NOT EXISTS idx_cert_id ON issued_certificates(certificate_id);
+CREATE INDEX IF NOT EXISTS idx_cert_rev ON certificate_revocations(certificate_id);
 """
 
 import sqlite3

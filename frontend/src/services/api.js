@@ -191,3 +191,70 @@ export const adminApi = {
     });
   }
 };
+
+export const certificateApi = {
+  getIssuerKeys: async () => {
+    return request("/certificates/issuer/keys");
+  },
+  generateIssuerKeys: async () => {
+    return request("/certificates/issuer/generate-keys", { method: "POST" });
+  },
+  issueCertificate: async (formDataOrJson) => {
+    if (formDataOrJson instanceof FormData) {
+      return request("/certificates/issuer/issue", {
+        method: "POST",
+        body: formDataOrJson
+      });
+    }
+    return request("/certificates/issuer/issue", {
+      method: "POST",
+      body: JSON.stringify(formDataOrJson)
+    });
+  },
+  getIssuedCertificates: async () => {
+    return request("/certificates/issuer/certificates");
+  },
+  revokeCertificate: async (certificateId, reason) => {
+    return request("/certificates/issuer/revoke", {
+      method: "POST",
+      body: JSON.stringify({ certificate_id: certificateId, reason })
+    });
+  },
+  getRevocationList: async () => {
+    return request("/certificates/issuer/revocation-list");
+  },
+  generateNonce: async (verifierLabel = "Online Verifier") => {
+    return request("/certificates/verifier/nonce", {
+      method: "POST",
+      body: JSON.stringify({ verifier_label: verifierLabel })
+    });
+  },
+  createPresentation: async (credentialPackage, disclosedKeys, nonce) => {
+    return request("/certificates/holder/present", {
+      method: "POST",
+      body: JSON.stringify({
+        credential_package: credentialPackage,
+        disclosed_keys: disclosedKeys,
+        nonce
+      })
+    });
+  },
+  verifyPresentation: async (presentation, trustedIssuerPubkey = null, revocationList = null) => {
+    return request("/certificates/verifier/verify", {
+      method: "POST",
+      body: JSON.stringify({
+        presentation,
+        trusted_issuer_pubkey: trustedIssuerPubkey,
+        revocation_list: revocationList
+      })
+    });
+  },
+  inspectFile: async (file) => {
+    const fd = new FormData();
+    fd.append("file", file);
+    return request("/certificates/inspect-file", {
+      method: "POST",
+      body: fd
+    });
+  }
+};

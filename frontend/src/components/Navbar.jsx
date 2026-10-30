@@ -10,7 +10,8 @@ import {
   LogOut, 
   LogIn, 
   UserPlus, 
-  User 
+  User,
+  Award
 } from "lucide-react";
 
 export default function Navbar({ activeTab, setActiveTab }) {
@@ -18,6 +19,7 @@ export default function Navbar({ activeTab, setActiveTab }) {
 
   const navItems = [
     { id: "dashboard", label: "Dashboard", icon: ShieldCheck },
+    { id: "certificates", label: "Prove It (Certificates)", icon: Award },
     { id: "verify", label: "Verify Integrity", icon: FileCheck },
     { id: "register-file", label: "Register Asset", icon: Upload, authRequired: true },
     { id: "my-files", label: "My Assets", icon: FolderLock, authRequired: true },
@@ -34,7 +36,7 @@ export default function Navbar({ activeTab, setActiveTab }) {
         
         {/* Brand */}
         <div 
-          onClick={() => setActiveTab("dashboard")} 
+          onClick={() => setActiveTab("certificates")} 
           className="flex cursor-pointer items-center space-x-3 transition-opacity hover:opacity-90"
         >
           <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 shadow-lg shadow-cyan-500/20">
@@ -43,13 +45,13 @@ export default function Navbar({ activeTab, setActiveTab }) {
           </div>
           <div>
             <div className="text-base font-bold tracking-tight text-white flex items-center space-x-2">
-              <span>TRUST, PRIVACY & PROVENANCE</span>
+              <span>PRIVACY CERTIFICATE VERIFIER</span>
               <span className="hidden sm:inline-block rounded bg-cyan-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-cyan-400 border border-cyan-500/30">
-                PROV-SEC
+                PROVE IT
               </span>
             </div>
             <p className="text-xs text-slate-400 hidden sm:block">
-              Privacy-Preserving Digital Provenance & Tamper-Evident Ledger
+              Privacy-Preserving Certificate Verification System – Prove It Without Showing It
             </p>
           </div>
         </div>
