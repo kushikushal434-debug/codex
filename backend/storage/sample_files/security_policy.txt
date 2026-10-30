@@ -1,0 +1,6 @@
+TRUST, PRIVACY & DIGITAL PROVENANCE SYSTEM POLICY
+===================================================
+1. Every registered asset must have a deterministic SHA-256 digest.
+2. Provenance records are non-repudiable through RSA-PSS 2048-bit signatures.
+3. Audit trails are sequentially chained with cryptographic hash pointers.
+4. A hash match confirms bitstream consistency with a recorded reference.

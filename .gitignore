@@ -1,0 +1,52 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+
+# Python Virtual Environments
+venv/
+backend/venv/
+.venv/
+env/
+ENV/
+
+# Python Bytecode & Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environment Variables & Secrets
+.env
+backend/.env
+*.env.local
+
+# Frontend Build Outputs
+dist/
+frontend/dist/
+build/
+*.local
+
+# SQLite Database & Storage Data
+*.db
+*.sqlite3
+backend/storage/provenance.db
+backend/storage/uploads/*.bin
+backend/storage/keys/private_key.pem
+
+# Logs & Debugging
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS & Editor Specific Files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
